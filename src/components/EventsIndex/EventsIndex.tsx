@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { readEvents } from '../../actions'
 import _ from 'lodash'
+import { Link } from 'react-router-dom'
 
 interface Props {
   readEvents: () => void
@@ -22,8 +23,6 @@ interface State {
 // テーブルを書く
 class EventsIndex extends Component<Props> {
   componentDidMount(){
-    console.log(this.props)
-    console.log(this.state)
     this.props.readEvents()
   }
 
@@ -31,7 +30,11 @@ class EventsIndex extends Component<Props> {
     return _.map(this.props.events, (event) => (
       <tr key={event.id}>
         <td>{event.id}</td>
-        <td>{event.title}</td>
+        <td>
+          <Link to={`/events/${event.id}`}>
+            {event.title}
+          </Link>
+        </td>
         <td>{event.body}</td>
       </tr>
     ))
@@ -39,18 +42,21 @@ class EventsIndex extends Component<Props> {
 
   render(){
     return(
-      <table>
-        <thead>
-          <tr>
-            <td>ID</td>
-            <td>Title</td>
-            <td>Message</td>
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderEvents()}
-        </tbody>
-      </table>
+      <React.Fragment>
+        <table>
+          <thead>
+            <tr>
+              <td>ID</td>
+              <td>Title</td>
+              <td>Message</td>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderEvents()}
+          </tbody>
+        </table>
+        <Link to="/event/new">New Event</Link>
+      </React.Fragment>
     )
   }
 }

@@ -1,11 +1,33 @@
 import { READ_EVENTS } from '../actions'
+import { READ_EVENT } from '../actions'
+import { DELETE_EVENT } from '../actions'
+import { POST_EVENT } from '../actions'
+
 import _ from 'lodash'
 
-export default (events={}, action: any) => {
+interface IEvent {
+  [key: number]:{
+    id: number
+    title: string
+    body: string
+  }
+}
+
+interface IAction {
+  [key: string]: any
+}
+
+export default (events: IEvent = {}, action: IAction) => {
   switch(action.type){
     case READ_EVENTS:
-      console.log(_.mapKeys(action.res.data, 'id'))
       return _.mapKeys(action.res.data, 'id')
+    case DELETE_EVENT:
+      delete(events[action.id])
+      return {...events}
+    case READ_EVENT:
+      const data = action.res.data
+      console.log(action.res.data)
+      return { ...events, [data.id]: data }
     default:
       return events
   }

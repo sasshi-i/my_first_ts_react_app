@@ -2,6 +2,7 @@ import { READ_EVENTS } from '../actions'
 import { READ_EVENT } from '../actions'
 import { DELETE_EVENT } from '../actions'
 import { POST_EVENT } from '../actions'
+import { UPDATE_EVENT } from '../actions'
 
 import _ from 'lodash'
 
@@ -24,9 +25,10 @@ export default (events: IEvent = {}, action: IAction) => {
     case DELETE_EVENT:
       delete(events[action.id])
       return {...events}
+    case POST_EVENT:
+    case UPDATE_EVENT:
     case READ_EVENT:
       const data = action.res.data
-      console.log(action.res.data)
       return { ...events, [data.id]: data }
     default:
       return events

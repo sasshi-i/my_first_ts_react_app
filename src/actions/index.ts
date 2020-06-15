@@ -4,6 +4,7 @@ import { Dispatch } from 'redux'
 export const READ_EVENTS = 'READ_EVENTS'
 export const READ_EVENT = 'READ_EVENT'
 export const POST_EVENT = 'POST_EVENT'
+export const PUT_EVENT = 'PUT_EVENT'
 export const DELETE_EVENT = 'DELETE_EVENT'
 
 const ROOT_URL = 'https://udemy-utils.herokuapp.com/api/v1'
@@ -15,7 +16,12 @@ export const readEvents = () => async (dispatch: Dispatch) => {
 }
 
 export const postEvent = (values: {title: string, body: string}) => async (dispatch: Dispatch) => {
-  const res = await axios.post(`${ROOT_URL}/events${QUERYSTRING}`,values)
+  const res = await axios.post(`${ROOT_URL}/events/${QUERYSTRING}`,values)
+  dispatch({type: POST_EVENT, res})
+}
+
+export const putEvent = (values: {id: number, title: string, body: string}) => async (dispatch: Dispatch) => {
+  const res = await axios.put(`${ROOT_URL}/events/${values.id}${QUERYSTRING}`,values)
   dispatch({type: POST_EVENT, res})
 }
 

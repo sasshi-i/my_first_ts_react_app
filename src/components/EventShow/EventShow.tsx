@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom'
 
-import { deleteEvent, getEvent } from '../../actions'
+import { deleteEvent, getEvent, putEvent } from '../../actions'
 
 interface Ifield {
   input: string
@@ -54,19 +54,20 @@ class EventShow extends Component<any>{
     this.props.history.push('/')
   }
 
-  async onSubmit(){
+  async onSubmit(values: {id: number, title: string, body: string}){
+    await this.props.putEvent(values)
     this.props.history.push('/')
   }
 
   render(){
-    const { handleSubmit, pristine, submitting } = this.props
+    const { handleSubmit, pristine, submitting, invalid } = this.props
     return(
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <Field label='title' name='title' type='text' component={this.renderField}></Field>
         <Field label='body' name='body' type='text' component={this.renderField}></Field>
 
         <div>
-          <input type="submit" value='Submit' disabled={ pristine || submitting }/>
+          <input type="submit" value='Submit' disabled={ pristine || submitting || invalid}/>
           <Link to='/'>Cancel</Link>
           <Link to='/' onClick={this.onDeleteClick}>Delete</Link>
         </div>
@@ -84,7 +85,7 @@ const validate = (values: {title: string, body: string}) => {
   return errors
 }
 
-const mapDispatchToProps = ( {deleteEvent, getEvent} )
+const mapDispatchToProps = ( {deleteEvent, getEvent, putEvent} )
 const mapStateToProps = (state: State, ownProps: any ) => {
   const event = state.events[ownProps.match.params.id]
   return { initialValues: event, state }
